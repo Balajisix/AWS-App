@@ -65,7 +65,7 @@
 
                 if (result.success) {
                     showMessage("✅ Verification Successful! Thank you.", "success");
-                    btn.classList.add('hidden'); // Hide button on success
+                    btn.classList.add('hidden');
                 } else {
                     showMessage("❌ " + result.message, "error");
                     btn.innerText = "Verify & Complete Handover";
@@ -73,7 +73,7 @@
                 }
             } catch (error) {
                 showMessage("❌ Network error. Please try again.", "error");
-                btn.innerText = "Verify & Complete Handover";
+                btn.innerText = "Verify";
                 btn.disabled = false;
             }
         }
