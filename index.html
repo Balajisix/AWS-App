@@ -22,7 +22,7 @@
         </div>
 
         <button id="verifyBtn" onclick="verifyOTP()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-200">
-            Verify & Complete Handover
+            Verify
         </button>
 
         <div id="messageBox" class="mt-4 text-center hidden p-3 rounded-md font-medium"></div>
@@ -65,10 +65,10 @@
 
                 if (result.success) {
                     showMessage("✅ Verification Successful! Thank you.", "success");
-                    btn.classList.add('hidden');
+                    btn.classList.add('hidden'); 
                 } else {
                     showMessage("❌ " + result.message, "error");
-                    btn.innerText = "Verify & Complete Handover";
+                    btn.innerText = "Verify";
                     btn.disabled = false;
                 }
             } catch (error) {
