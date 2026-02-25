@@ -29,7 +29,6 @@
     </div>
 
     <script>
-        // 1. Auto-fill the Request ID from the URL (e.g., ?req_id=REQ-123)
         const urlParams = new URLSearchParams(window.location.search);
         const reqId = urlParams.get('req_id');
         if (reqId) {
@@ -52,8 +51,7 @@
             btn.disabled = true;
 
             try {
-                // REPLACE THIS URL WITH YOUR ACTUAL API GATEWAY URL FOR verify_otp!
-                const apiUrl = "https://jlcrpr3rsl.execute-api.us-east-1.amazonaws.com/default/verify_otp"; 
+                const apiUrl = "https://ztnkun7i7k.execute-api.us-east-1.amazonaws.com/default/verify_otp"; 
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
