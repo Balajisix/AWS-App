@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter OTP Verification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Food Handover Verification</h2>
+        
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Request ID</label>
+            <input type="text" id="requestId" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 focus:outline-none">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Enter Donor's OTP</label>
+            <input type="number" id="otpCode" placeholder="Enter 6-digit code" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center tracking-widest text-lg font-mono">
+        </div>
+
+        <button id="verifyBtn" onclick="verifyOTP()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-200">
+            Verify & Complete Handover
+        </button>
+
+        <div id="messageBox" class="mt-4 text-center hidden p-3 rounded-md font-medium"></div>
+    </div>
+
+    <script>
+        // 1. Auto-fill the Request ID from the URL (e.g., ?req_id=REQ-123)
+        const urlParams = new URLSearchParams(window.location.search);
+        const reqId = urlParams.get('req_id');
+        if (reqId) {
+            document.getElementById('requestId').value = reqId;
+        }
+
+        // 2. The Verification Logic
+        async function verifyOTP() {
+            const otpCode = document.getElementById('otpCode').value;
+            const requestId = document.getElementById('requestId').value;
+            const msgBox = document.getElementById('messageBox');
+            const btn = document.getElementById('verifyBtn');
+
+            if (!otpCode || otpCode.length !== 6) {
+                showMessage("Please enter a valid 6-digit OTP", "error");
+                return;
+            }
+
+            btn.innerText = "Verifying...";
+            btn.disabled = true;
+
+            try {
+                // REPLACE THIS URL WITH YOUR ACTUAL API GATEWAY URL FOR verify_otp!
+                const apiUrl = "https://YOUR_API_GATEWAY_URL_HERE/verify_otp"; 
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ request_id: requestId, otp_code: otpCode })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage("✅ Verification Successful! Thank you.", "success");
+                    btn.classList.add('hidden'); // Hide button on success
+                } else {
+                    showMessage("❌ " + result.message, "error");
+                    btn.innerText = "Verify & Complete Handover";
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                showMessage("❌ Network error. Please try again.", "error");
+                btn.innerText = "Verify & Complete Handover";
+                btn.disabled = false;
+            }
+        }
+
+        function showMessage(text, type) {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.innerText = text;
+            msgBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            
+            if (type === 'error') {
+                msgBox.classList.add('bg-red-100', 'text-red-700');
+            } else {
+                msgBox.classList.add('bg-green-100', 'text-green-700');
+            }
+        }
+    </script>
+</body>
+</html>
